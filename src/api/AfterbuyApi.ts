@@ -1,6 +1,8 @@
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
 import {
   AfterbuyRequest,
+  AfterbuyRequestData,
+  AfterbuyRequestFull,
   AfterbuyResponse,
   GetAfterBuyTimeRequest,
   GetAfterbuyTimeResponse,
@@ -28,8 +30,13 @@ import {
   GetTranslatedMailTemplateResponse,
   GetUserDefinedFlagsRequest,
   GetUserDefinedFlagsResponse,
+  UpdateCatalogsRequest,
+  UpdateCatalogsResponse,
+  UpdateProductsRequest,
+  UpdateProductsResponse,
+  UpdateSoldItemsRequest,
+  UpdateSoldItemsResponse,
 } from "../models";
-import { AfterbuyRequestData, AfterbuyRequestFull } from "../models/AfterbuyRequest";
 import { AfterbuyApiOptions } from "./AfterbuyApiOptions";
 import { AfterbuyException } from "./AfterbuyException";
 
@@ -66,6 +73,9 @@ export class AfterbuyApi {
     "Afterbuy.Result.Products.Orders.Order.ShippingInfo.ParcelLabels.ParcelLabel",
     "Afterbuy.Result.UserDefinedFlags.UserDefinedFlag",
     "Afterbuy.Result.Versions.Version",
+    "Afterbuy.Result.NewCatalogs.NewCatalog",
+    "Afterbuy.Result.CatalogsNotDeleted.CatalogNotDeleted",
+    "Afterbuy.Result.NewProducts.NewProduct",
   ];
 
   private apiUrl = "https://api.afterbuy.de/afterbuy/ABInterface.aspx";
@@ -95,6 +105,11 @@ export class AfterbuyApi {
   public async sendRequest(request: GetStockInfoRequest): Promise<GetStockInfoResponse>;
   public async sendRequest(request: GetTranslatedMailTemplateRequest): Promise<GetTranslatedMailTemplateResponse>;
   public async sendRequest(request: GetUserDefinedFlagsRequest): Promise<GetUserDefinedFlagsResponse>;
+  public async sendRequest<UpdateAction extends UpdateCatalogsRequest.UpdateAction>(
+    request: UpdateCatalogsRequest<UpdateAction>
+  ): Promise<UpdateCatalogsResponse>;
+  public async sendRequest(request: UpdateProductsRequest): Promise<UpdateProductsResponse>;
+  public async sendRequest(request: UpdateSoldItemsRequest): Promise<UpdateSoldItemsResponse>;
   public async sendRequest<
     Request extends AfterbuyRequest<string, any>,
     Response extends AfterbuyResponse<Request["AfterbuyGlobal"]["CallName"], any>
@@ -239,6 +254,36 @@ export class AfterbuyApi {
   ): Promise<GetUserDefinedFlagsResponse> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetUserDefinedFlags", DetailLevel },
+      ...data,
+    });
+  }
+
+  public updateCatalogs<UpdateAction extends UpdateCatalogsRequest.UpdateAction>(
+    data: AfterbuyRequestData<UpdateCatalogsRequest<UpdateAction>>,
+    DetailLevel: UpdateCatalogsRequest.DetailLevel = UpdateCatalogsRequest.DetailLevel.None
+  ): Promise<UpdateCatalogsResponse> {
+    return this.sendRequest({
+      AfterbuyGlobal: { CallName: "UpdateCatalogs", DetailLevel },
+      ...data,
+    });
+  }
+
+  public updateProducts(
+    data: AfterbuyRequestData<UpdateProductsRequest>,
+    DetailLevel: UpdateProductsRequest.DetailLevel = UpdateProductsRequest.DetailLevel.None
+  ): Promise<UpdateProductsResponse> {
+    return this.sendRequest({
+      AfterbuyGlobal: { CallName: "UpdateProducts", DetailLevel },
+      ...data,
+    });
+  }
+
+  public updateSoldItems(
+    data: AfterbuyRequestData<UpdateSoldItemsRequest>,
+    DetailLevel: UpdateSoldItemsRequest.DetailLevel = UpdateSoldItemsRequest.DetailLevel.None
+  ): Promise<UpdateSoldItemsResponse> {
+    return this.sendRequest({
+      AfterbuyGlobal: { CallName: "UpdateSoldItems", DetailLevel },
       ...data,
     });
   }

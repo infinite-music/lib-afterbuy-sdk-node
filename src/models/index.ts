@@ -62,6 +62,9 @@ export { GetStockInfoRequest } from "./request/GetStockInfoRequest";
 export { GetTranslatedMailTemplateRequest } from "./request/GetTranslatedMailTemplateRequest";
 export { GetUserDefinedFlagsRequest } from "./request/GetUserDefinedFlagsRequest";
 export { GetVersionRequest } from "./request/GetVersionRequest";
+export { UpdateCatalogsRequest } from "./request/UpdateCatalogsRequest";
+export { UpdateProductsRequest } from "./request/UpdateProductsRequest";
+export { UpdateSoldItemsRequest } from "./request/UpdateSoldItemsRequest";
 
 export { GetAfterbuyTimeResponse } from "./response/GetAfterbuyTimeResponse";
 export { GetListerHistoryResponse } from "./response/GetListerHistoryResponse";
@@ -77,10 +80,13 @@ export { GetStockInfoResponse } from "./response/GetStockInfoResponse";
 export { GetTranslatedMailTemplateResponse } from "./response/GetTranslatedMailTemplateResponse";
 export { GetUserDefinedFlagsResponse } from "./response/GetUserDefinedFlagsResponse";
 export { GetVersionResponse } from "./response/GetVersionResponse";
+export { UpdateCatalogsResponse } from "./response/UpdateCatalogsResponse";
+export { UpdateProductsResponse } from "./response/UpdateProductsResponse";
+export { UpdateSoldItemsResponse } from "./response/UpdateSoldItemsResponse";
 
 export { AfterbuyError, AfterbuyErrorCode } from "./data/AfterbuyError";
 export { AfterbuyGlobal } from "./data/AfterbuyGlobal";
-export { AfterbuyRequest } from "./AfterbuyRequest";
+export { AfterbuyRequest, AfterbuyRequestData, AfterbuyRequestFull } from "./AfterbuyRequest";
 export { AfterbuyResponse, AfterbuyErrorResponse } from "./AfterbuyResponse";
 export { AfterbuyResult } from "./data/AfterbuyResult";
 export { AfterbuyWarning, AfterbuyWarningCode } from "./data/AfterbuyWarning";
