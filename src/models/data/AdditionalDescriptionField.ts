@@ -1,6 +1,6 @@
 export interface AdditionalDescriptionField {
   FieldID: number;
   FieldName: string;
-  FieldLabel: string;
+  FieldLabel?: string;
   FieldContent: string;
 }

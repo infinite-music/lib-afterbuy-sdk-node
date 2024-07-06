@@ -9,7 +9,7 @@ export interface PaymentService {
   MinAmount: number;
   MaxAmount: number;
   PlattformName: string;
-  StandardForAll: boolean;
-  Default: boolean;
+  StandardForAll?: boolean;
+  Default?: boolean;
   CountryGroup: string;
 }

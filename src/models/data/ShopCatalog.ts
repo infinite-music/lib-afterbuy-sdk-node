@@ -10,5 +10,5 @@ export interface ShopCatalog {
   Picture1: string;
   Picture2: string;
   TitlePicture: string;
-  CatalogProducts: { ProductID: number[] };
+  CatalogProducts?: { ProductID: number[] };
 }

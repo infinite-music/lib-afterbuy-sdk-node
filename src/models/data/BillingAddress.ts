@@ -5,7 +5,7 @@ export interface BillingAddress extends ShippingAddress {
   AfterbuyUserIDAlt: number;
   UserIDPlattform: string;
   Title: string;
-  Fax: string;
+  Fax?: string;
   Mail: string;
-  IsMerchant: boolean;
+  IsMerchant?: boolean;
 }

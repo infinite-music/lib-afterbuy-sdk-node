@@ -46,5 +46,5 @@ export enum AfterbuyWarningCode {
 export interface AfterbuyWarning {
   WarningCode: AfterbuyWarningCode;
   WarningDescription: string;
-  WarningLongDescription: string;
+  WarningLongDescription?: string;
 }

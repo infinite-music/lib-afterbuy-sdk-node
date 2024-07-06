@@ -14,5 +14,5 @@ export interface PaymentInfo {
   PaymentInstruction: string;
   InvoiceDate: string;
   EFTID: string;
-  PayoutIds: { PayoutId: PayoutId[] };
+  PayoutIds?: { PayoutId: PayoutId[] };
 }

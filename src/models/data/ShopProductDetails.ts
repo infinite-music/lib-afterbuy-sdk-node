@@ -6,5 +6,5 @@ export interface ShopProductDetails {
   Anr: number;
   UnitOfQuantity: string;
   BasepriceFactor: number;
-  BaseProductData: BaseProductData;
+  BaseProductData?: BaseProductData;
 }

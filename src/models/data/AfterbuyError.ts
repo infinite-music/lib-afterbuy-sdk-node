@@ -67,5 +67,5 @@ export enum AfterbuyErrorCode {
 export interface AfterbuyError {
   ErrorCode: AfterbuyErrorCode;
   ErrorDescription: string;
-  ErrorLongDescription: string;
+  ErrorLongDescription?: string;
 }

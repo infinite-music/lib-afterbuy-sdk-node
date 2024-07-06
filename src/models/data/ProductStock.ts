@@ -7,9 +7,9 @@ export interface ProductStock {
   Quantity: number;
   FullFilmentQuantity: number;
   MinimumStock: number;
-  Discontinued: boolean;
-  Stock: boolean;
-  MergeStock: boolean;
+  Discontinued?: boolean;
+  Stock?: boolean;
+  MergeStock?: boolean;
   AvailableShop: number;
   Available: number;
   RealQuantity: number;

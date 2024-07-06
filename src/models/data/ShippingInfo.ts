@@ -8,5 +8,5 @@ export interface ShippingInfo {
   ShippingTotalCost: number;
   ShippingTaxRate: number;
   DeliveryDate: string;
-  ParcelLabels: { ParcelLabel: ParcelLabel[] };
+  ParcelLabels?: { ParcelLabel: ParcelLabel[] };
 }

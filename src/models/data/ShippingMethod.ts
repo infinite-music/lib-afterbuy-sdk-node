@@ -15,7 +15,7 @@ export interface ShippingMethod {
   IslandAdditionalCosts: number;
   FreeShippingPriceFrom: number;
   AdditionalItemCosts: number;
-  WeightDefinitions: {
+  WeightDefinitions?: {
     WeightDefinitions: {
       WeightTo: number;
       Price: number;
