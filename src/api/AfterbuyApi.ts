@@ -1,3 +1,4 @@
+import { EventEmitter } from "events";
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
 import {
   AfterbuyRequest,
@@ -38,9 +39,13 @@ import {
   UpdateSoldItemsResponse,
 } from "../models";
 import { AfterbuyApiOptions } from "./AfterbuyApiOptions";
+import { AfterbuyApiResponse } from "./AfterbuyApiResponse";
 import { AfterbuyException } from "./AfterbuyException";
 
-export class AfterbuyApi {
+export class AfterbuyApi extends EventEmitter<{
+  request: [RequestInit];
+  response: [AfterbuyApiResponse<any>];
+}> {
   private static arrayResponsePaths = [
     "Afterbuy.Result.ListedItems.ListedItem",
     "Afterbuy.Result.MailTemplates.MailTemplate",
@@ -89,49 +94,76 @@ export class AfterbuyApi {
   });
 
   public constructor(private options: AfterbuyApiOptions) {
+    super();
     if (options.apiUrl) this.apiUrl = options.apiUrl;
   }
 
-  public async sendRequest(request: GetAfterBuyTimeRequest): Promise<GetAfterbuyTimeResponse>;
-  public async sendRequest(request: GetListerHistoryRequest): Promise<GetListerHistoryResponse>;
-  public async sendRequest(request: GetMailTemplatesRequest): Promise<GetMailTemplatesResponse>;
-  public async sendRequest(request: GetPaymentServicesRequest): Promise<GetPaymentServicesResponse>;
-  public async sendRequest(request: GetProductDiscountsRequest): Promise<GetProductDiscountsResponse>;
-  public async sendRequest(request: GetShippingCostRequest): Promise<GetShippingCostResponse>;
-  public async sendRequest(request: GetShippingServicesRequest): Promise<GetShippingServicesResponse>;
-  public async sendRequest(request: GetShopCatalogsRequest): Promise<GetShopCatalogsResponse>;
-  public async sendRequest(request: GetShopProductsRequest): Promise<GetShopProductsResponse>;
-  public async sendRequest(request: GetSoldItemsRequest): Promise<GetSoldItemsResponse>;
-  public async sendRequest(request: GetStockInfoRequest): Promise<GetStockInfoResponse>;
-  public async sendRequest(request: GetTranslatedMailTemplateRequest): Promise<GetTranslatedMailTemplateResponse>;
-  public async sendRequest(request: GetUserDefinedFlagsRequest): Promise<GetUserDefinedFlagsResponse>;
+  public async sendRequest(request: GetAfterBuyTimeRequest): Promise<AfterbuyApiResponse<GetAfterbuyTimeResponse>>;
+  public async sendRequest(request: GetListerHistoryRequest): Promise<AfterbuyApiResponse<GetListerHistoryResponse>>;
+  public async sendRequest(request: GetMailTemplatesRequest): Promise<AfterbuyApiResponse<GetMailTemplatesResponse>>;
+  public async sendRequest(
+    request: GetPaymentServicesRequest
+  ): Promise<AfterbuyApiResponse<GetPaymentServicesResponse>>;
+  public async sendRequest(
+    request: GetProductDiscountsRequest
+  ): Promise<AfterbuyApiResponse<GetProductDiscountsResponse>>;
+  public async sendRequest(request: GetShippingCostRequest): Promise<AfterbuyApiResponse<GetShippingCostResponse>>;
+  public async sendRequest(
+    request: GetShippingServicesRequest
+  ): Promise<AfterbuyApiResponse<GetShippingServicesResponse>>;
+  public async sendRequest(request: GetShopCatalogsRequest): Promise<AfterbuyApiResponse<GetShopCatalogsResponse>>;
+  public async sendRequest(request: GetShopProductsRequest): Promise<AfterbuyApiResponse<GetShopProductsResponse>>;
+  public async sendRequest(request: GetSoldItemsRequest): Promise<AfterbuyApiResponse<GetSoldItemsResponse>>;
+  public async sendRequest(request: GetStockInfoRequest): Promise<AfterbuyApiResponse<GetStockInfoResponse>>;
+  public async sendRequest(
+    request: GetTranslatedMailTemplateRequest
+  ): Promise<AfterbuyApiResponse<GetTranslatedMailTemplateResponse>>;
+  public async sendRequest(
+    request: GetUserDefinedFlagsRequest
+  ): Promise<AfterbuyApiResponse<GetUserDefinedFlagsResponse>>;
   public async sendRequest<UpdateAction extends UpdateCatalogsRequest.UpdateAction>(
     request: UpdateCatalogsRequest<UpdateAction>
-  ): Promise<UpdateCatalogsResponse>;
-  public async sendRequest(request: UpdateProductsRequest): Promise<UpdateProductsResponse>;
-  public async sendRequest(request: UpdateSoldItemsRequest): Promise<UpdateSoldItemsResponse>;
+  ): Promise<AfterbuyApiResponse<UpdateCatalogsResponse>>;
+  public async sendRequest(request: UpdateProductsRequest): Promise<AfterbuyApiResponse<UpdateProductsResponse>>;
+  public async sendRequest(request: UpdateSoldItemsRequest): Promise<AfterbuyApiResponse<UpdateSoldItemsResponse>>;
   public async sendRequest<
     Request extends AfterbuyRequest<string, any>,
     Response extends AfterbuyResponse<Request["AfterbuyGlobal"]["CallName"], any>
-  >({ AfterbuyGlobal, ...data }: Request): Promise<Response> {
+  >({ AfterbuyGlobal, ...requestData }: Request): Promise<AfterbuyApiResponse<Response>> {
     const { apiUrl, headers } = this;
 
-    const request = this.extendRequest(AfterbuyGlobal, data);
-    const body = '<?xml version="1.0" encoding="utf-8"?>' + this.buildRequest(request);
+    const requestBuilder = this.extendRequest(AfterbuyGlobal, requestData);
+    const requestBody = '<?xml version="1.0" encoding="utf-8"?>' + this.buildRequest(requestBuilder);
+    const request: RequestInit = { method: "POST", headers, body: requestBody };
 
-    const response = await fetch(apiUrl, { method: "POST", headers, body });
-    const responseText = await response.text();
+    this.emit("request", request);
 
-    const responseData = this.parseResponse<Response>(responseText);
+    const response = await fetch(apiUrl, request);
+    const { ok, status, statusText } = response;
+    const responseBody = await response.text();
 
-    if (responseData.Afterbuy.CallStatus === "Success") return responseData;
-    else throw new AfterbuyException(responseText, responseData);
+    const data = this.parseResponse<Response>(responseBody);
+
+    const result: AfterbuyApiResponse<Response> = {
+      url: apiUrl,
+      request,
+      response,
+      ok,
+      status,
+      statusText,
+      data,
+    };
+
+    this.emit("response", result);
+
+    if (data.Afterbuy.CallStatus === "Success") return result;
+    else throw new AfterbuyException(result);
   }
 
   public getAfterbuyTime(
     data: AfterbuyRequestData<GetAfterBuyTimeRequest> = {},
     DetailLevel: GetAfterBuyTimeRequest.DetailLevel = GetAfterBuyTimeRequest.DetailLevel.None
-  ): Promise<GetAfterbuyTimeResponse> {
+  ): Promise<AfterbuyApiResponse<GetAfterbuyTimeResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetAfterbuyTime", DetailLevel },
       ...data,
@@ -141,7 +173,7 @@ export class AfterbuyApi {
   public getListerHistory(
     data: AfterbuyRequestData<GetListerHistoryRequest>,
     DetailLevel: GetListerHistoryRequest.DetailLevel = GetListerHistoryRequest.DetailLevel.None
-  ): Promise<GetListerHistoryResponse> {
+  ): Promise<AfterbuyApiResponse<GetListerHistoryResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetListerHistory", DetailLevel },
       ...data,
@@ -151,7 +183,7 @@ export class AfterbuyApi {
   public getMailTemplates(
     data: AfterbuyRequestData<GetMailTemplatesRequest> = {},
     DetailLevel: GetMailTemplatesRequest.DetailLevel = GetMailTemplatesRequest.DetailLevel.Base
-  ): Promise<GetMailTemplatesResponse> {
+  ): Promise<AfterbuyApiResponse<GetMailTemplatesResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetMailTemplates", DetailLevel },
       ...data,
@@ -161,7 +193,7 @@ export class AfterbuyApi {
   public getPaymentServices(
     data: AfterbuyRequestData<GetPaymentServicesRequest> = {},
     DetailLevel: GetPaymentServicesRequest.DetailLevel = GetPaymentServicesRequest.DetailLevel.All
-  ): Promise<GetPaymentServicesResponse> {
+  ): Promise<AfterbuyApiResponse<GetPaymentServicesResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetPaymentServices", DetailLevel },
       ...data,
@@ -171,7 +203,7 @@ export class AfterbuyApi {
   public getProductDiscounts(
     data: AfterbuyRequestData<GetProductDiscountsRequest>,
     DetailLevel: GetProductDiscountsRequest.DetailLevel = GetProductDiscountsRequest.DetailLevel.All
-  ): Promise<GetProductDiscountsResponse> {
+  ): Promise<AfterbuyApiResponse<GetProductDiscountsResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetProductDiscounts", DetailLevel },
       ...data,
@@ -181,7 +213,7 @@ export class AfterbuyApi {
   public getShippingCost(
     data: AfterbuyRequestData<GetShippingCostRequest>,
     DetailLevel: GetShippingCostRequest.DetailLevel = GetShippingCostRequest.DetailLevel.None
-  ): Promise<GetShippingCostResponse> {
+  ): Promise<AfterbuyApiResponse<GetShippingCostResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetShippingCost", DetailLevel },
       ...data,
@@ -191,7 +223,7 @@ export class AfterbuyApi {
   public getShippingServices(
     data: AfterbuyRequestData<GetShippingServicesRequest>,
     DetailLevel: GetShippingServicesRequest.DetailLevel = GetShippingServicesRequest.DetailLevel.All
-  ): Promise<GetShippingServicesResponse> {
+  ): Promise<AfterbuyApiResponse<GetShippingServicesResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetShippingServices", DetailLevel },
       ...data,
@@ -201,7 +233,7 @@ export class AfterbuyApi {
   public getShopCatalogs(
     data: AfterbuyRequestData<GetShopCatalogsRequest>,
     DetailLevel: GetShopCatalogsRequest.DetailLevel = GetShopCatalogsRequest.DetailLevel.Base
-  ): Promise<GetShopCatalogsResponse> {
+  ): Promise<AfterbuyApiResponse<GetShopCatalogsResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetShopCatalogs", DetailLevel },
       ...data,
@@ -211,7 +243,7 @@ export class AfterbuyApi {
   public getShopProducts(
     data: AfterbuyRequestData<GetShopProductsRequest>,
     DetailLevel: GetShopProductsRequest.DetailLevel = GetShopProductsRequest.DetailLevel.All
-  ): Promise<GetShopProductsResponse> {
+  ): Promise<AfterbuyApiResponse<GetShopProductsResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetShopProducts", DetailLevel },
       ...data,
@@ -221,7 +253,7 @@ export class AfterbuyApi {
   public getSoldItems(
     data: AfterbuyRequestData<GetSoldItemsRequest>,
     DetailLevel: GetSoldItemsRequest.DetailLevel = GetSoldItemsRequest.DetailLevel.Operation
-  ): Promise<GetSoldItemsResponse> {
+  ): Promise<AfterbuyApiResponse<GetSoldItemsResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetSoldItems", DetailLevel },
       ...data,
@@ -231,7 +263,7 @@ export class AfterbuyApi {
   public getStockInfo(
     data: AfterbuyRequestData<GetStockInfoRequest>,
     DetailLevel: GetStockInfoRequest.DetailLevel = GetStockInfoRequest.DetailLevel.NoAvailability
-  ): Promise<GetStockInfoResponse> {
+  ): Promise<AfterbuyApiResponse<GetStockInfoResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetStockInfo", DetailLevel },
       ...data,
@@ -241,7 +273,7 @@ export class AfterbuyApi {
   public getTranslatedMailTemplate(
     data: AfterbuyRequestData<GetTranslatedMailTemplateRequest>,
     DetailLevel: GetTranslatedMailTemplateRequest.DetailLevel = GetTranslatedMailTemplateRequest.DetailLevel.All
-  ): Promise<GetTranslatedMailTemplateResponse> {
+  ): Promise<AfterbuyApiResponse<GetTranslatedMailTemplateResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetTranslatedMailTemplate", DetailLevel },
       ...data,
@@ -251,7 +283,7 @@ export class AfterbuyApi {
   public getUserDefinedFlags(
     data: AfterbuyRequestData<GetUserDefinedFlagsRequest>,
     DetailLevel: GetUserDefinedFlagsRequest.DetailLevel = GetUserDefinedFlagsRequest.DetailLevel.None
-  ): Promise<GetUserDefinedFlagsResponse> {
+  ): Promise<AfterbuyApiResponse<GetUserDefinedFlagsResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "GetUserDefinedFlags", DetailLevel },
       ...data,
@@ -261,7 +293,7 @@ export class AfterbuyApi {
   public updateCatalogs<UpdateAction extends UpdateCatalogsRequest.UpdateAction>(
     data: AfterbuyRequestData<UpdateCatalogsRequest<UpdateAction>>,
     DetailLevel: UpdateCatalogsRequest.DetailLevel = UpdateCatalogsRequest.DetailLevel.None
-  ): Promise<UpdateCatalogsResponse> {
+  ): Promise<AfterbuyApiResponse<UpdateCatalogsResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "UpdateCatalogs", DetailLevel },
       ...data,
@@ -271,7 +303,7 @@ export class AfterbuyApi {
   public updateProducts(
     data: AfterbuyRequestData<UpdateProductsRequest>,
     DetailLevel: UpdateProductsRequest.DetailLevel = UpdateProductsRequest.DetailLevel.None
-  ): Promise<UpdateProductsResponse> {
+  ): Promise<AfterbuyApiResponse<UpdateProductsResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "UpdateProducts", DetailLevel },
       ...data,
@@ -281,7 +313,7 @@ export class AfterbuyApi {
   public updateSoldItems(
     data: AfterbuyRequestData<UpdateSoldItemsRequest>,
     DetailLevel: UpdateSoldItemsRequest.DetailLevel = UpdateSoldItemsRequest.DetailLevel.None
-  ): Promise<UpdateSoldItemsResponse> {
+  ): Promise<AfterbuyApiResponse<UpdateSoldItemsResponse>> {
     return this.sendRequest({
       AfterbuyGlobal: { CallName: "UpdateSoldItems", DetailLevel },
       ...data,

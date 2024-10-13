@@ -9,7 +9,7 @@ export { BaseProductsRelationData } from "./data/BaseProductsRelationData";
 export { BillingAddress } from "./data/BillingAddress";
 export { BuyerInfo } from "./data/BuyerInfo";
 export { ChildProduct } from "./data/ChildProduct";
-export { EBayVariationData } from "./data/EbayVariationData";
+export { EBayVariationData } from "./data/EBayVariationData";
 export { ListedItem } from "./data/ListedItem";
 export { ListingDetails } from "./data/ListingDetails";
 export { MailTemplate } from "./data/MailTemplate";
@@ -63,7 +63,7 @@ export { GetTranslatedMailTemplateRequest } from "./request/GetTranslatedMailTem
 export { GetUserDefinedFlagsRequest } from "./request/GetUserDefinedFlagsRequest";
 export { GetVersionRequest } from "./request/GetVersionRequest";
 export { UpdateCatalogsRequest } from "./request/UpdateCatalogsRequest";
-export { UpdateProductsRequest } from "./request/UpdateProductsRequest";
+export { UpdateShopProductsRequest as UpdateProductsRequest } from "./request/UpdateShopProductsRequest";
 export { UpdateSoldItemsRequest } from "./request/UpdateSoldItemsRequest";
 
 export { GetAfterbuyTimeResponse } from "./response/GetAfterbuyTimeResponse";

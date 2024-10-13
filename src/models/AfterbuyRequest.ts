@@ -1,4 +1,4 @@
-import { AfterbuyGlobal, AfterbuyGlobalFull } from "./data/AfterbuyGlobal";
+import { AfterbuyGlobal, AfterbuyGlobalWithCredentials } from "./data/AfterbuyGlobal";
 
 export interface AfterbuyRequest<CallName extends string, DetailLevel extends number = 0> {
   AfterbuyGlobal: AfterbuyGlobal<CallName, DetailLevel>;
@@ -6,7 +6,10 @@ export interface AfterbuyRequest<CallName extends string, DetailLevel extends nu
 
 export type AfterbuyRequestFull<Request extends AfterbuyRequest<string, number>> = {
   Request: Request & {
-    AfterbuyGlobal: AfterbuyGlobalFull<Request["AfterbuyGlobal"]["CallName"], Request["AfterbuyGlobal"]["DetailLevel"]>;
+    AfterbuyGlobal: AfterbuyGlobalWithCredentials<
+      Request["AfterbuyGlobal"]["CallName"],
+      Request["AfterbuyGlobal"]["DetailLevel"]
+    >;
   };
 };
 

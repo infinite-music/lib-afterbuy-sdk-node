@@ -1,13 +1,16 @@
-import { AfterbuyError, AfterbuyErrorResponse } from "../models";
+import { AfterbuyError, AfterbuyErrorResponse, AfterbuyResponse } from "../models";
+import { AfterbuyApiResponse } from "./AfterbuyApiResponse";
 
-export class AfterbuyException<CallName extends string> extends Error {
+export class AfterbuyException<CallName extends string, T extends AfterbuyErrorResponse<CallName>> extends Error {
   public readonly CallStatus: AfterbuyErrorResponse<CallName>["Afterbuy"]["CallStatus"];
   public readonly CallName: CallName;
   public readonly Errors: AfterbuyError[];
 
-  constructor(public readonly responseRaw: string, public readonly response: AfterbuyErrorResponse<CallName>) {
+  constructor(public readonly response: AfterbuyApiResponse<T>) {
     const {
-      Afterbuy: { CallName, CallStatus, Result },
+      data: {
+        Afterbuy: { CallName, CallStatus, Result },
+      },
     } = response;
 
     super(`Afterbuy API call ${CallName} failed with ${CallStatus} status`);

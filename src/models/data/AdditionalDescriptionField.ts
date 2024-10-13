@@ -1,6 +1,13 @@
+/**
+ * Represents an additional description field with various properties.
+ */
 export interface AdditionalDescriptionField {
+  /** Field ID */
   FieldID: number;
-  FieldName: string;
+  /** Field ID name */
+  Name: string;
+  /** Visible field labeling */
   FieldLabel?: string;
+  /** Content */
   FieldContent: string;
 }

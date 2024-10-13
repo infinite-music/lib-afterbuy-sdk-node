@@ -2,7 +2,10 @@
   "name": "afterbuy-sdk",
   "version": "1.0.0",
   "description": "A Node.js SDK for the Afterbuy API built using TypeScript",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
     "build": "tsc"
@@ -22,6 +25,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
+    "dotenv": "^16.4.5",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.5",
     "typescript": "^5.5.2"

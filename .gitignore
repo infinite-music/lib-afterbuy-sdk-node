@@ -9,6 +9,7 @@ yarn-error.log
 # Build output
 dist/
 build/
+*.tgz
 
 # IDE/Editor specific
 .vscode/
@@ -20,3 +21,6 @@ build/
 logs/
 *.log
 npm-debug.log*
+
+# Local configuration
+.env
