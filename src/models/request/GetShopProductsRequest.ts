@@ -13,10 +13,10 @@ export interface GetShopProductsRequest
       | (DateRangeFilter<"DateFilter"> & ValueFilter<"DateFilter", "ModDate" | "LastSale" | "LastStockChange">)
     > {
   MaxShopItems: number;
-  SuppressBaseProductRelatedData?: 1;
-  PaginationEnabled?: 1;
+  SuppressBaseProductRelatedData?: 1 | 0;
+  PaginationEnabled?: 1 | 0;
   PageNumber?: number;
-  ReturnShop20Container?: 1;
+  ReturnShop20Container?: 1 | 0;
 }
 
 export namespace GetShopProductsRequest {

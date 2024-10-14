@@ -6,7 +6,7 @@ export interface GetTranslatedMailTemplateRequest
   extends AfterbuyRequest<"GetTranslatedMailTemplate", GetTranslatedMailTemplateRequest.DetailLevel>,
     AfterbuyDataFilter<NumberValueFilter<"TemplateID"> | StringValueFilter<"TemplateName">> {
   OfferID: number;
-  UseTemplate?: 1;
+  UseTemplate?: 1 | 0;
   TemplateText?: string;
 }
 

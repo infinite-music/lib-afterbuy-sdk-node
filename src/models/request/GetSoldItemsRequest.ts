@@ -45,10 +45,10 @@ export interface GetSoldItemsRequest
         | StringValueListFilter<"AlternativeItemNumber1" | "AlternativeItemNumber2">
       >
     > {
-  RequestAllItems?: 1;
+  RequestAllItems?: 1 | 0;
   MaxSoldItems?: number;
-  OrderDirection?: 1;
-  ReturnHiddenItems?: 1;
+  OrderDirection?: 1 | 0;
+  ReturnHiddenItems?: 1 | 0;
 }
 
 export namespace GetSoldItemsRequest {

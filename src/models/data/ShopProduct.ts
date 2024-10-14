@@ -158,11 +158,11 @@ export interface ShopProduct {
   /** Auction stock. */
   AuctionQuantity: number;
   /** Stock items. */
-  Stock: boolean;
+  Stock: 1 | 0;
   /** Discontinued items. */
-  Discontinued: boolean;
+  Discontinued: 1 | 0;
   /** Merge stocks. */
-  MergeStock: boolean;
+  MergeStock: -1 | 1 | 0;
   /** Unit. */
   UnitOfQuantity: UnitOfQuantity;
   /** Content. */
@@ -186,7 +186,7 @@ export interface ShopProduct {
   /** Position. */
   Position: number;
   /** Replace auction title with product name. */
-  TitleReplace: boolean;
+  TitleReplace: 1 | 0;
   /** Container with scales. */
   ScaledDiscounts?: { ScaledDiscount: ScaledDiscount[] };
   /** VAT. */
@@ -196,9 +196,9 @@ export interface ShopProduct {
   /** Search alias. */
   SearchAlias: string;
   /** show on Froogle. */
-  Froogle: boolean;
+  Froogle: 1 | 0;
   /** Kelkoo Export. */
-  Kelkoo: boolean;
+  Kelkoo: 1 | 0;
   /** Shipping group. */
   ShippingGroup: string;
   /** Shipping group Shop. */
@@ -245,6 +245,10 @@ export interface ShopProduct {
   ImageSmallURL: string;
   /** Image large URL. */
   ImageLargeURL: string;
+  /** Amazon number types. */
+  AmazonStandardProductIDType: string;
+  /** Amazon number. */
+  AmazonStandardProductIDValue: string;
   /** Manufacturer number types. */
   ManufacturerStandardProductIDType: string;
   /** Manufacturer number. */
@@ -265,6 +269,12 @@ export interface ShopProduct {
   ItemColor?: string;
   /** Product size. */
   ItemSize?: string;
+  /** Customs Tariff Number */
+  CustomsTariffNumber?: string;
+  /** Gender */
+  Gender: Gender;
+  /** Age Group */
+  AgeGroup: AgeGroup;
   /** Unique product canonical url. */
   CanonicalUrl?: string;
   /** Possible values: 0 - No class, 10 - A+++, 9 - A++, 8 - A+, 7 - A, 6 - B, 5 - C, 4 - D, 3 - E, 2 - F, 1 - G. */
@@ -297,5 +307,15 @@ export interface ShopProduct {
   /** Container for the EconomicOperator. */
   EconomicOperator: EconomicOperator;
   /** Facebook status. */
-  Facebook?: boolean;
+  Facebook?: 1 | 0;
+  /** Custom label 0. */
+  CustomLabel0?: string;
+  /** Custom label 1. */
+  CustomLabel1?: string;
+  /** Custom label 2. */
+  CustomLabel2?: string;
+  /** Custom label 3. */
+  CustomLabel3?: string;
+  /** Custom label 4. */
+  CustomLabel4?: string;
 }

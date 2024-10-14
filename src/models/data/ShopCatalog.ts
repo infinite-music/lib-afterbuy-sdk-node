@@ -6,7 +6,7 @@ export interface ShopCatalog {
   Level: number;
   Position: number;
   AdditionalText: string;
-  Show: boolean;
+  Show: 1 | 0;
   Picture1: string;
   Picture2: string;
   TitlePicture: string;

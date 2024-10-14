@@ -7,5 +7,5 @@ export interface BillingAddress extends ShippingAddress {
   Title: string;
   Fax?: string;
   Mail: string;
-  IsMerchant?: boolean;
+  IsMerchant?: 1 | 0;
 }

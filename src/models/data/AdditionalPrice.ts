@@ -9,5 +9,5 @@ export interface AdditionalPrice {
   /** Price. */
   Value: number;
   /** Gross price. */
-  Pretax?: boolean;
+  Pretax?: 1 | 0;
 }

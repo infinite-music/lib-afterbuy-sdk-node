@@ -2,11 +2,11 @@ import { ShopProductDetails } from "./ShopProductDetails";
 import { SoldItemAttribute } from "./SoldItemAttribute";
 
 export interface SoldItem {
-  ItemDetailsDone: boolean;
+  ItemDetailsDone: 1 | 0;
   ItemID: number;
   Anr: number;
-  IsAmazonBusiness?: boolean;
-  IsAmazonPrime?: boolean;
+  IsAmazonBusiness?: 1 | 0;
+  IsAmazonPrime?: 1 | 0;
   FulfillmentServiceLeve?: number;
   eBayTransactionID?: number;
   AlternativeItemNumber1?: string;
@@ -23,8 +23,8 @@ export interface SoldItem {
   ItemModDate: string;
   ItemPlatformName: string;
   ItemLink: string;
-  eBayFeedbackCompleted?: boolean;
-  eBayFeedbackReceived?: boolean;
+  eBayFeedbackCompleted?: 1 | 0;
+  eBayFeedbackReceived?: 1 | 0;
   eBayFeedbackCommentType: string;
   ShopProductDetails?: ShopProductDetails;
   SoldItemAttributes?: { SoldItemAttribute: SoldItemAttribute[] };

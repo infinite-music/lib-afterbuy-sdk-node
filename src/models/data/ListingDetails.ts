@@ -19,6 +19,6 @@ export interface ListingDetails {
   eBayBuyItNowPrice?: number;
   eBayPictureURL?: string;
   eBayGaleryURL?: string;
-  eBayRelist?: boolean;
+  eBayRelist?: 1 | 0;
   ProductDetails?: ProductDetails;
 }

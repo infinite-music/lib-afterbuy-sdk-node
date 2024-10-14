@@ -25,7 +25,7 @@ export interface ProductDiscount {
   /** Store ID */
   ShopId: number;
   /** Action active/inactive */
-  DiscountActive: boolean;
+  DiscountActive: 1 | 0;
   /** Type of action (LiveShopping - 2, Discount - 3) */
   ControlId: DiscountControlType;
   /** Text for the old price */

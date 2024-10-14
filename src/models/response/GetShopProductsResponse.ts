@@ -10,7 +10,7 @@ export interface GetShopProductsResponse
     "GetShopProducts",
     {
       /** Indicates if other products exist */
-      HasMoreProducts: boolean;
+      HasMoreProducts: 1 | 0;
       /** The numerically highest ProductID in the query */
       LastProductID: number;
       /** Container with pagination data */

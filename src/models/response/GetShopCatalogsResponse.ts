@@ -5,7 +5,7 @@ export interface GetShopCatalogsResponse
   extends AfterbuyResponse<
     "GetShopCatalogs",
     {
-      HasMoreCatalogs: boolean;
+      HasMoreCatalogs: 1 | 0;
       LastCatalogID: number;
       Catalogs: { Catalog: ShopCatalog[] };
     }

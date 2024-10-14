@@ -7,7 +7,7 @@ export interface GetListerHistoryResponse
     {
       ResultCount: number;
       LastHistoryID: number;
-      HasMoreProducts: boolean;
+      HasMoreProducts: 1 | 0;
       ListedItems?: { ListedItem: ListedItem[] };
     }
   > {}
