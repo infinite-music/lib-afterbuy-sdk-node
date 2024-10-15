@@ -2,13 +2,9 @@
   "name": "afterbuy-sdk",
   "version": "1.0.0",
   "description": "A Node.js SDK for the Afterbuy API built using TypeScript",
-  "main": "dist/index.js",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "test": "jest",
-    "build": "tsc"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/infinite-music/lib-afterbuy-sdk-node.git"
   },
   "keywords": [
     "afterbuy",
@@ -17,16 +13,31 @@
     "typescript",
     "node.js"
   ],
-  "author": "Your Name",
+  "author": {
+    "name": "Aram Becker",
+    "email": "becker.aram@gmail.com",
+    "url": "https://github.com/1nVitr0"
+  },
   "license": "MIT",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest",
+    "build": "tsc"
+  },
   "dependencies": {
     "axios": "^1.7.2",
     "fast-xml-parser": "^4.4.0"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/jest": "^29.5.12",
     "dotenv": "^16.4.5",
     "jest": "^29.7.0",
+    "semantic-release": "^24.1.2",
     "ts-jest": "^29.1.5",
     "typescript": "^5.5.2"
   }
