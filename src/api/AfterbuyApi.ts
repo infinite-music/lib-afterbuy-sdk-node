@@ -156,8 +156,8 @@ export class AfterbuyApi extends EventEmitter<{
 
     this.emit("response", result);
 
-    if (data.Afterbuy.CallStatus === "Success") return result;
-    else throw new AfterbuyException(result);
+    if (!ok || data.Afterbuy.CallStatus === "Error") throw new AfterbuyException(result);
+    else return result;
   }
 
   public getAfterbuyTime(
@@ -305,7 +305,7 @@ export class AfterbuyApi extends EventEmitter<{
     DetailLevel: UpdateProductsRequest.DetailLevel = UpdateProductsRequest.DetailLevel.None
   ): Promise<AfterbuyApiResponse<UpdateProductsResponse>> {
     return this.sendRequest({
-      AfterbuyGlobal: { CallName: "UpdateProducts", DetailLevel },
+      AfterbuyGlobal: { CallName: "UpdateShopProducts", DetailLevel },
       ...data,
     });
   }

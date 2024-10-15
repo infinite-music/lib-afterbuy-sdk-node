@@ -81,7 +81,7 @@ export { GetTranslatedMailTemplateResponse } from "./response/GetTranslatedMailT
 export { GetUserDefinedFlagsResponse } from "./response/GetUserDefinedFlagsResponse";
 export { GetVersionResponse } from "./response/GetVersionResponse";
 export { UpdateCatalogsResponse } from "./response/UpdateCatalogsResponse";
-export { UpdateProductsResponse } from "./response/UpdateProductsResponse";
+export { UpdateShopProductsResponse as UpdateProductsResponse } from "./response/UpdateShopProductsResponse";
 export { UpdateSoldItemsResponse } from "./response/UpdateSoldItemsResponse";
 
 export { AfterbuyError, AfterbuyErrorCode } from "./data/AfterbuyError";

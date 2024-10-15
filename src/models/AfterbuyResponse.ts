@@ -2,7 +2,7 @@ import { AfterbuyError } from "./data/AfterbuyError";
 
 export interface AfterbuyResponse<CallName extends string, T> {
   Afterbuy: {
-    CallStatus: "Success" | "Error";
+    CallStatus: "Success" | "Warning" | "Error";
     CallName: CallName;
     Result: T;
   };

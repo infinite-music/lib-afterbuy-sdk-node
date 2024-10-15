@@ -2,7 +2,7 @@ import { AfterbuyRequest } from "../AfterbuyRequest";
 import { ShopProductUpdate } from "../data/ShopProductUpdate";
 
 export interface UpdateShopProductsRequest
-  extends AfterbuyRequest<"UpdateProducts", UpdateShopProductsRequest.DetailLevel> {
+  extends AfterbuyRequest<"UpdateShopProducts", UpdateShopProductsRequest.DetailLevel> {
   Products: { Product: ShopProductUpdate[] };
 }
 
