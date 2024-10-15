@@ -4,7 +4,7 @@
   "description": "A Node.js SDK for the Afterbuy API built using TypeScript",
   "repository": {
     "type": "git",
-    "url": "https://github.com/infinite-music/lib-afterbuy-sdk-node.git"
+    "url": "git@github.com:infinite-music/lib-afterbuy-sdk-node.git"
   },
   "keywords": [
     "afterbuy",
