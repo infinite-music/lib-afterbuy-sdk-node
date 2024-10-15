@@ -245,9 +245,15 @@ export interface ShopProduct {
   ImageSmallURL: string;
   /** Image large URL. */
   ImageLargeURL: string;
-  /** Amazon number types. */
+  /**
+   * Amazon number types.
+   * HINT: undocumented property
+   */
   AmazonStandardProductIDType: string;
-  /** Amazon number. */
+  /**
+   * Amazon number.
+   * HINT: undocumented property
+   */
   AmazonStandardProductIDValue: string;
   /** Manufacturer number types. */
   ManufacturerStandardProductIDType: string;
@@ -269,11 +275,20 @@ export interface ShopProduct {
   ItemColor?: string;
   /** Product size. */
   ItemSize?: string;
-  /** Customs Tariff Number */
+  /**
+   * Customs Tariff Number
+   * HINT: undocumented property
+   *  */
   CustomsTariffNumber?: string;
-  /** Gender */
+  /**
+   * Gender
+   * HINT: undocumented property
+   *  */
   Gender: Gender;
-  /** Age Group */
+  /**
+   * Age Group
+   * HINT: undocumented property
+   *  */
   AgeGroup: AgeGroup;
   /** Unique product canonical url. */
   CanonicalUrl?: string;
@@ -308,14 +323,29 @@ export interface ShopProduct {
   EconomicOperator: EconomicOperator;
   /** Facebook status. */
   Facebook?: 1 | 0;
-  /** Custom label 0. */
+  /**
+   * Custom label 0.
+   * HINT: undocumented property
+   **/
   CustomLabel0?: string;
-  /** Custom label 1. */
+  /**
+   * Custom label 1.
+   * HINT: undocumented property
+   **/
   CustomLabel1?: string;
-  /** Custom label 2. */
+  /**
+   * Custom label 2.
+   * HINT: undocumented property
+   **/
   CustomLabel2?: string;
-  /** Custom label 3. */
+  /**
+   * Custom label 3.
+   * HINT: undocumented property
+   **/
   CustomLabel3?: string;
-  /** Custom label 4. */
+  /**
+   * Custom label 4.
+   * HINT: undocumented property
+   **/
   CustomLabel4?: string;
 }
