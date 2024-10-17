@@ -326,12 +326,12 @@ export class AfterbuyApi extends EventEmitter<{
   ) {
     const { AccountToken, PartnerToken, ErrorLanguage } = this.options;
 
-    return {
+    return this.sanitizeRequest({
       Request: {
         AfterbuyGlobal: { ...AfterbuyGlobal, AccountToken, PartnerToken, ErrorLanguage },
         ...data,
       },
-    } as AfterbuyRequestFull<Request>;
+    }) as AfterbuyRequestFull<Request>;
   }
 
   private buildRequest<T>(request: T) {
@@ -339,6 +339,46 @@ export class AfterbuyApi extends EventEmitter<{
   }
 
   private parseResponse<T>(xml: string) {
-    return this.xmlParser.parse(xml) as T;
+    return this.sanitizeResponse(this.xmlParser.parse(xml)) as T;
+  }
+
+  private sanitizeRequest<T>(request: T): T {
+    if (request === null || request === undefined) return request;
+    if (Array.isArray(request)) return request.map((item) => this.sanitizeRequest(item)) as T;
+
+    switch (typeof request) {
+      case "boolean":
+        return (request ? 1 : 0) as T;
+      case "number":
+        const localeStr = request.toLocaleString("de");
+        return request.toString() === localeStr ? request : (localeStr as T);
+      case "object":
+        return (Object.keys(request) as (keyof T)[]).reduce((carry, key) => {
+          const val = request[key];
+          carry[key] = this.sanitizeRequest(val);
+          return carry;
+        }, {} as T);
+      default:
+        return request;
+    }
+  }
+
+  private sanitizeResponse<T>(response: T): T {
+    if (response === null || response === undefined) return response;
+    if (Array.isArray(response)) return response.map((item) => this.sanitizeResponse(item)) as T;
+
+    switch (typeof response) {
+      case "string":
+        if (response === "true" || response === "false") return (response === "true" ? true : false) as T;
+        return response;
+      case "object":
+        return (Object.keys(response) as (keyof T)[]).reduce((carry, key) => {
+          const val = response[key];
+          carry[key] = this.sanitizeResponse(val);
+          return carry;
+        }, {} as T);
+      default:
+        return response;
+    }
   }
 }
