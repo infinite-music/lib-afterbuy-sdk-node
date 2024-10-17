@@ -15,74 +15,100 @@ npm install afterbuy-sdk
 To use the Afterbuy SDK in your project, you need to import the `AfterbuySDK` class from the `afterbuy-sdk` package:
 
 ```typescript
-import { AfterbuySDK } from 'afterbuy-sdk';
+import { AfterbuyApi } from 'afterbuy-sdk';
+
+// Get the Afterbuy credentials, e.g. from your environment variables
+const {
+  AFTERBUY_ACCOUNT_TOKEN,
+  AFTERBUY_PARTNER_TOKEN
+} = process.env;
 
 // Initialize the SDK
-const afterbuySDK = new AfterbuySDK();
+const afterbuyApi = new AfterbuyApi({
+    AccountToken: AFTERBUY_ACCOUNT_TOKEN,
+    PartnerToken: AFTERBUY_PARTNER_TOKEN
+});
 
 // Make API calls
-const response = await afterbuySDK.makeRequest('GET', '/products');
+const response = await afterbuyApi.getShopProducts({ MaxShopItems: 100 });
 console.log(response.data);
 ```
-
-## API
-
-The Afterbuy SDK provides the following methods:
-
-### `makeRequest(method: string, path: string, data?: any): Promise<AfterbuyResponse>`
-
-This method makes an API request to the Afterbuy API. It takes the HTTP method, API path, and optional data as parameters and returns a promise that resolves to an `AfterbuyResponse` object.
-
-### `getProducts(): Promise<Product[]>`
-
-This method retrieves a list of products from the Afterbuy API. It returns a promise that resolves to an array of `Product` objects.
-
-### `createProduct(product: Product): Promise<Product>`
-
-This method creates a new product in the Afterbuy API. It takes a `Product` object as a parameter and returns a promise that resolves to the created `Product` object.
-
-### `updateProduct(productId: string, product: Product): Promise<Product>`
-
-This method updates an existing product in the Afterbuy API. It takes the product ID and a `Product` object as parameters and returns a promise that resolves to the updated `Product` object.
-
-### `deleteProduct(productId: string): Promise<void>`
-
-This method deletes a product from the Afterbuy API. It takes the product ID as a parameter and returns a promise that resolves to `void`.
 
 ## Examples
 
 Here are some examples of how to use the Afterbuy SDK:
 
 ```typescript
-import { AfterbuySDK, Product } from 'afterbuy-sdk';
+import { AfterbuyApi } from 'afterbuy-sdk';
+import { GetShopProductsRequest, UpdateShopProductsRequest } from 'afterbuy-sdk/requests';
+import { ShopProductUpdate, SkuUpdateAction, CatalogUpdateAction, AttributeUpdateAction, BaseProductUpdateAction } from 'afterbuy-sdk/data';
 
-const afterbuySDK = new AfterbuySDK();
+// Get the Afterbuy credentials, e.g. from your environment variables
+const {
+  AFTERBUY_ACCOUNT_TOKEN,
+  AFTERBUY_PARTNER_TOKEN
+} = process.env;
 
-// Get all products
-const products = await afterbuySDK.getProducts();
-console.log(products);
+// Initialize the SDK
+const afterbuyApi = new AfterbuyApi({
+    AccountToken: AFTERBUY_ACCOUNT_TOKEN,
+    PartnerToken: AFTERBUY_PARTNER_TOKEN
+});
 
-// Create a new product
-const newProduct: Product = {
-  name: 'New Product',
-  price: 9.99,
-  quantity: 10,
+// Collect 100 products with some filter
+const getProductsRequest: GetShopProductsRequest = {
+  MaxShopItems: 100,
+  Filters: {
+    Filter: [
+      { FilterName: "ProductID", FilterValues: ["12345"] }
+    ]
+  }
 };
-const createdProduct = await afterbuySDK.createProduct(newProduct);
-console.log(createdProduct);
 
-// Update an existing product
-const updatedProduct: Product = {
-  name: 'Updated Product',
-  price: 14.99,
-  quantity: 5,
-};
-const updatedProduct = await afterbuySDK.updateProduct('123456', updatedProduct);
-console.log(updatedProduct);
+const getProductsResponse = await afterbuyApi.sendRequest(getProductsRequest);
+const products = getProductsResponse.data.Products.Product;
 
-// Delete a product
-await afterbuySDK.deleteProduct('123456');
-console.log('Product deleted');
+if (products.length > 0) {
+  const productToUpdate = products[0];
+
+  // Update the product
+  const updateProductRequest: UpdateShopProductsRequest = {
+    Products: {
+      Product: [{
+        ...productToUpdate,
+        ProductIdent: { ProductID: productToUpdate.ProductID },
+        EconomicOperatorId: 123,
+        Skus: [{ UpdateAction: SkuUpdateAction.Replace, Sku: ["new-sku"] }],
+        AddCatalogs: [{ UpdateAction: CatalogUpdateAction.Update, AddCatalog: [] }],
+        AddAttributes: [{ UpdateAction: AttributeUpdateAction.Update, AddAttribute: [] }],
+        AddBaseProducts: [{ UpdateAction: BaseProductUpdateAction.Update, AddBaseProduct: [] }],
+        AdditionalDescriptionFields: { AdditionalDescriptionField: [] },
+        UseEbayVariations: { Variation: [] }
+      }]
+    }
+  };
+
+  await afterbuyApi.sendRequest(updateProductRequest);
+
+  // Create a new the product
+  const recreateProductRequest: UpdateShopProductsRequest = {
+    Products: {
+      Product: [{
+        ...productToUpdate,
+        ProductIdent: { ProductID: productToUpdate.ProductID },
+        EconomicOperatorId: 123,
+        Skus: [{ UpdateAction: SkuUpdateAction.Add, Sku: ["new-sku"] }],
+        AddCatalogs: [{ UpdateAction: CatalogUpdateAction.Add, AddCatalog: [] }],
+        AddAttributes: [{ UpdateAction: AttributeUpdateAction.Add, AddAttribute: [] }],
+        AddBaseProducts: [{ UpdateAction: BaseProductUpdateAction.Update, AddBaseProduct: [] }],
+        AdditionalDescriptionFields: { AdditionalDescriptionField: [] },
+        UseEbayVariations: { Variation: [] }
+      }]
+    }
+  };
+
+  await afterbuyApi.sendRequest(recreateProductRequest);
+}
 ```
 
 ## Contributing
