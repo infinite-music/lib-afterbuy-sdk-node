@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/infinite-music/lib-afterbuy-sdk-node/compare/v1.0.2...v1.0.3) (2024-10-17)
+
+
+### Bug Fixes
+
+* transform all numbers into de locale ([0bd4269](https://github.com/infinite-music/lib-afterbuy-sdk-node/commit/0bd4269674ae8a9fef2137459ea5fde5a48e2012))
+
 ## [1.0.2](https://github.com/infinite-music/lib-afterbuy-sdk-node/compare/v1.0.1...v1.0.2) (2024-10-17)
 
 
