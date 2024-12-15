@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/infinite-music/lib-afterbuy-sdk-node/compare/v1.0.3...v1.0.4) (2024-12-15)
+
+
+### Bug Fixes
+
+* update to v2024-12-12 ([a5fc9c9](https://github.com/infinite-music/lib-afterbuy-sdk-node/commit/a5fc9c92244f2db9a1b71ba293750ab3e1f2189e))
+
 ## [1.0.3](https://github.com/infinite-music/lib-afterbuy-sdk-node/compare/v1.0.2...v1.0.3) (2024-10-17)
 
 
