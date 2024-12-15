@@ -38,7 +38,7 @@ export interface ShopProductUpdate
     | "Catalogs"
     | "Attributes"
     | "BaseProducts"
-    | "EconomicOperator"
+    | "EconomicOperators"
     | "AdditionalDescriptionFields"
   > {
   ProductIdent: ProductIdent;

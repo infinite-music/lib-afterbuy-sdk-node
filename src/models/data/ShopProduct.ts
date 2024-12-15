@@ -320,7 +320,7 @@ export interface ShopProduct {
   /** Container for additional price fields. */
   Discounts?: { Discount: ProductDiscount[] };
   /** Container for the EconomicOperator. */
-  EconomicOperator: EconomicOperator;
+  EconomicOperators: { EconomicOperator: EconomicOperator[] };
   /** Facebook status. */
   Facebook?: 1 | 0;
   /**
